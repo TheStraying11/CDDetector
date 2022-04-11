@@ -6,3 +6,6 @@
 ## Version: 0.0.1
 
 main.lua
+utils.lua
+events.lua
+commands.lua
