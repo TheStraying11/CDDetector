@@ -1,5 +1,5 @@
 _G.CDDetector = {
-	DebugLevel = 0;
+	DebugLevel = 0,
 	HasteSpells = {
 		[2825] = true, -- Bloodlust
 		[32182] = true, -- Heroism
@@ -12,13 +12,13 @@ _G.CDDetector = {
 		[256740] = true, -- Drums of the Maelstrom
 		[309658] = true, -- Drums of Deathly Ferocity
 		[293076] = true -- Mallet of Thunderous Skins
-	};
+	},
 	CRSpells = {
 		[20484] = true, -- Rebirth
 		[61999] = true, -- Raise Ally
 		[20707] = true, -- Soulstone
 		[265116] = true, -- Unstable Temporal Time Shifter
 		[348477] = true -- Disposable Spectrophasic Reanimator
-	};
-	frame = CreateFrame("Frame");
+	},
+	frame = CreateFrame("Frame")
 }
