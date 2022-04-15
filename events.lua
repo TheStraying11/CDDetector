@@ -66,6 +66,12 @@ function events:COMBAT_LOG_EVENT_UNFILTERED()
     if CDDetector.Spells[spellID] == "Hostile_Targeted" then
         SendChatMessage("CD Detector: "..sourceName.." cast Hostile spell "..GetSpellLink(spellID).." on "..destName, channel)
     end
+    if CDDetector.Spells[spellID] == "Notable_Untargeted" then
+        SendChatMessage("CD Detector: "..sourceName.." cast Notable spell "..GetSpellLink(spellID), channel)
+    end
+    if CDDetector.Spells[spellID] == "Notable_Targeted" then
+        SendChatMessage("CD Detector: "..sourceName.." cast Notable spell "..GetSpellLink(spellID).." on "..destName, channel)
+    end
     if CDDetector.Spells[spellID] == "Test" then
         CDDetector.utils.DoLog("CD Detector: "..sourceName.." cast Test spell "..GetSpellLink(spellID), 1)
     end

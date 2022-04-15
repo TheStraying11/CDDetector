@@ -10,7 +10,9 @@ _G.CDDetector = {
       Haste = true,
       CR = true,
       Hostile_Targeted = true,
-      Hostile_Untargeted = true
+      Hostile_Untargeted = true,
+      Notable_Targeted = true,
+      Notable_Untargeted = true
     },
     Spells = {
         [2825] = "Haste", -- Bloodlust

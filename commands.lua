@@ -25,7 +25,7 @@ function commands.CDDAddSpell(arg)
         CDDCustomSpells[spellID] = spellType
         SELECTED_CHAT_FRAME:AddMessage("Added Custom Spell "..spellID.." ("..spellName.."): "..spellType)
     else
-        SELECTED_CHAT_FRAME:AddMessage("Spell Type "..spellType.." does not exist, try \'Haste\', \'CR\', \'Hostile_Targeted\', or \'Hostile_Untargeted\'")
+        SELECTED_CHAT_FRAME:AddMessage("Spell Type "..spellType.." does not exist, try \'Haste\', \'CR\', \'Hostile_Targeted\', \'Hostile_Untargeted\', \'Notable_Targeted\', or \'Notable_Untargeted\'")
     end
 end
 
