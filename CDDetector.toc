@@ -1,4 +1,4 @@
-## Interface: 90105
+## Interface: 90200
 ## Title: CDDetector
 ## Notes: Sends an alert in chat when someone uses a raid CD
 ## Author: Zoë
