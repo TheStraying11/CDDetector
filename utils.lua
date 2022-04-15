@@ -18,9 +18,8 @@ function utils.split(inputstr, sep)
 end
 
 function utils.DoLog(message, level)
-    if level > CDDetector.DebugLevel then
-        JoinChannelByName("CDDetector", "AddonDev");
-        SendChatMessage(message, "CHANNEL", nil, GetChannelName("CDDetector"));
+    if level <= CDDetector.DebugLevel then
+        ChatFrame4:AddMessage(message)
     end
 end
 

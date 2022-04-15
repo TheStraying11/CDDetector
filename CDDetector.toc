@@ -3,9 +3,12 @@
 ## Notes: Sends an alert in chat when someone uses a raid CD
 ## Author: Zoë
 ## Website: http://www.studiolucia.uk/wow/addons/cddetector
-## Version: 0.0.1
+## Version: 0.0.2
 
-main.lua
+## SavedVariables: CDDCustomSpells
+
+init.lua
 utils.lua
 events.lua
 commands.lua
+main.lua

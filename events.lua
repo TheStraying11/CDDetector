@@ -4,28 +4,44 @@
 --- DateTime: 11/04/2022 18:06
 ---
 
-local events
+local events = {};
 
 function events:ADDON_LOADED(Addon)
-    if Addon == "CDDetector" then print("CDDetector loaded") end
+    if Addon == "CDDetector" then
+        SELECTED_CHAT_FRAME:AddMessage("CDDetector loaded")
+        if CDDCustomSpells == nil then
+            CDDCustomSpells = {}
+        end
+
+        for k, v in pairs(CDDCustomSpells) do
+            CDDetector.Spells[k] = v;
+            CDDetector.CustomSpells = CDDetector.CustomSpells+1;
+        end
+    end
 end
 
-function events:COMBAT_LOG_EVENT_UNFILTERED(...)
-    local timestamp, subevent, _, _, sourceName, _, _, _, destName, _, _, spellID, spellName = CombatLogGetCurrentEventInfo()
+function events:COMBAT_LOG_EVENT_UNFILTERED()
+    local _, subevent, _, _, sourceName, _, _, _, destName, _, _, spellID, spellName = CombatLogGetCurrentEventInfo()
 
     if subevent ~= "SPELL_CAST_SUCCESS" then return nil end
-    if not UnitGUID(sourceName) then return nil end
-
-
-    if destName ~= nil then
-        CDDetector.DoLog(subevent..", "..spellName.." ("..spellID.."), "..sourceName..", "..destName, 2)
-    else
-        CDDetector.DoLog(subevent..", "..spellName.." ("..spellID.."), "..sourceName, 2)
+    if not (CDDetector.Spells[spellID]) then return nil end
+    if (CDDetector.Spells[spellID] == "Haste" or CDDetector.Spells[spellID] == "CR") then
+        if not (UnitInRaid(sourceName) or UnitInParty(sourceName)) then
+            return nil
+        end
     end
 
-    local channel = "YELL"
+    if destName ~= nil then
+        CDDetector.utils.DoLog(subevent..", "..spellName.." ("..spellID.."), "..sourceName..", "..destName, 2)
+    else
+        CDDetector.utils.DoLog(subevent..", "..spellName.." ("..spellID.."), "..sourceName, 2)
+    end
+
+    local channel = "SAY"
     if IsInGroup() then channel = "PARTY" end
     if IsInRaid() then channel = "RAID" end
+    if IsInInstance() then channel = "INSTANCE_CHAT" end
+
     if UnitIsUnit(sourceName, "pet") then
         sourceName = UnitName("player") -- replace pet name with player name
     end
@@ -38,30 +54,23 @@ function events:COMBAT_LOG_EVENT_UNFILTERED(...)
         end
     end
 
-    if CDDetector.CRSpells[spellID] then
-        SendChatMessage("CD Detector: "..sourceName.." cast combat res spell "..GetSpellLink(spellID).." on "..destName, channel)
+    if CDDetector.Spells[spellID] == "CR" then
+        SendChatMessage("CD Detector: "..sourceName.." cast Combat Resurrection spell "..GetSpellLink(spellID).." on "..destName, channel)
     end
-    if CDDetector.HasteSpells[spellID] then
-        SendChatMessage("CD Detector: "..sourceName.." cast haste spell "..GetSpellLink(spellID), channel)
+    if CDDetector.Spells[spellID] == "Haste" then
+        SendChatMessage("CD Detector: "..sourceName.." cast Haste spell "..GetSpellLink(spellID), channel)
+    end
+    if CDDetector.Spells[spellID] == "Hostile_Untargeted" then
+        SendChatMessage("CD Detector: "..sourceName.." cast Hostile spell "..GetSpellLink(spellID), channel)
+    end
+    if CDDetector.Spells[spellID] == "Hostile_Targeted" then
+        SendChatMessage("CD Detector: "..sourceName.." cast Hostile spell "..GetSpellLink(spellID).." on "..destName, channel)
+    end
+    if CDDetector.Spells[spellID] == "Test" then
+        CDDetector.utils.DoLog("CD Detector: "..sourceName.." cast Test spell "..GetSpellLink(spellID), 1)
     end
 end
 
-frame:SetScript(
-        "OnEvent",
-        function(self, event, ...)
-            local status, err = pcall(events[event], self, ...)
-            if not status then
-                CDDetector.DoLog(event, 1)
-                CDDetector.DoLog(err, 1)
-                for k, v in pairs {...} do
-                    CDDetector.DoLog(k..' : '..v, 1)
-                end
-            end
-        end
-)
 
-for k, v in pairs(events) do
-    CDDetector.frame:RegisterEvent(k) -- Register all events for which handlers have been defined
-end
 
 CDDetector.events = events;

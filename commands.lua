@@ -7,14 +7,51 @@
 local commands = {};
 
 function commands.CDDToggleDebug(arg)
-    local args = CDDetector.utils.split(arg)
-    CDDetector.DebugLevel = tonumber(args[1])
-    CDDetector.DoLog("DebugLevel: "..CDDetector.DebugLevel, CDDetector.DebugLevel)
+    local DebugLevel = unpack(CDDetector.utils.split(arg))
+    DebugLevel = tonumber(DebugLevel)
+    CDDetector.DebugLevel = DebugLevel
+    CDDetector.utils.DoLog("DebugLevel: "..DebugLevel, DebugLevel)
 end
 
-for command, func in pairs(commands) do
-    _G["SLASH_"..command:upper().."1"] = "/"..command;
-    SlashCmdList[command:upper()] = func;
+function commands.CDDAddSpell(arg)
+    local spellType, spellID = unpack(CDDetector.utils.split(arg))
+    local spellName = GetSpellInfo(spellID)
+
+    spellID = tonumber(spellID)
+
+    if CDDetector.SpellTypes[spellType] then
+        CDDetector.Spells[spellID] = spellType
+        CDDetector.CustomSpells = CDDetector.CustomSpells+1
+        CDDCustomSpells[spellID] = spellType
+        SELECTED_CHAT_FRAME:AddMessage("Added Custom Spell "..spellID.." ("..spellName.."): "..spellType)
+    else
+        SELECTED_CHAT_FRAME:AddMessage("Spell Type "..spellType.." does not exist, try \'Haste\', \'CR\', \'Hostile_Targeted\', or \'Hostile_Untargeted\'")
+    end
+end
+
+function commands.CDDListSpells(_)
+    if CDDetector.CustomSpells == 0 then
+        SELECTED_CHAT_FRAME:AddMessage("No custom spells have been added")
+    else
+        for k, v in pairs(CDDCustomSpells) do
+            local spellName = GetSpellInfo(k)
+            SELECTED_CHAT_FRAME:AddMessage(k.." ("..spellName.."): "..v)
+        end
+    end
+end
+
+function commands.CDDRemoveSpell(arg)
+    local spellID = unpack(CDDetector.utils.split(arg))
+    spellID = tonumber(spellID)
+    local spellName = GetSpellInfo(spellID)
+    if CDDCustomSpells[spellID] then
+        SELECTED_CHAT_FRAME:AddMessage("Removed Custom Spell "..spellID.." ("..spellName.."): "..CDDCustomSpells[spellID])
+        CDDCustomSpells[spellID] = nil
+        CDDetector.Spells[spellID] = nil
+        CDDetector.CustomSpells = CDDetector.CustomSpells-1
+    else
+        SELECTED_CHAT_FRAME:AddMessage("Custom Spell "..spellID.." does not exist, try \'/CDDListSpells\'")
+    end
 end
 
 CDDetector.commands = commands;
