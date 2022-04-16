@@ -3,7 +3,7 @@
 ## Notes: Sends an alert in chat when someone uses a raid CD
 ## Author: Zoë
 ## Website: http://www.studiolucia.uk/wow/addons/cddetector
-## Version: 0.0.2
+## Version: 0.0.3
 
 ## SavedVariables: CDDCustomSpells
 

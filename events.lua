@@ -38,9 +38,10 @@ function events:COMBAT_LOG_EVENT_UNFILTERED()
     end
 
     local channel = "SAY"
+    if IsInInstance() then channel = "INSTANCE_CHAT" end
     if IsInGroup() then channel = "PARTY" end
     if IsInRaid() then channel = "RAID" end
-    if IsInInstance() then channel = "INSTANCE_CHAT" end
+    
 
     if UnitIsUnit(sourceName, "pet") then
         sourceName = UnitName("player") -- replace pet name with player name
